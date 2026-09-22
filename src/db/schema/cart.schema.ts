@@ -1,11 +1,11 @@
-import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { user } from './user.schema.js';
 
 export const cart = pgTable('cart', {
-  id: text('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
 
-  userId: text('user_id')
+  userId: uuid('user_id')
     .notNull()
     .unique()
     .references(() => user.id, {
