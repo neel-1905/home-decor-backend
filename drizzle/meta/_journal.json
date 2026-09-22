@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1790088412220,
+      "tag": "0000_add_init_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790088630981,
+      "tag": "0001_add_user_dob_mobile",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790089461758,
+      "tag": "0002_add_user_onboarding",
+      "breakpoints": true
+    }
+  ]
+}
