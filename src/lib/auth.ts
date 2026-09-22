@@ -15,6 +15,22 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: true,
   },
+  user: {
+    additionalFields: {
+      mobile: {
+        type: 'string',
+        required: true, // Requires it during registration
+      },
+      dob: {
+        type: 'string', // Matches our mode: 'string' configuration from earlier
+        required: true,
+      },
+      roleId: {
+        type: 'string',
+        required: true, // Make false if it gets assigned later by default
+      },
+    },
+  },
 
   trustedOrigins: [
     'schema://',
