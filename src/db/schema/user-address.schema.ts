@@ -5,7 +5,7 @@ import { user } from './user.schema.js';
 export const userAddress = pgTable('user_address', {
   id: uuid('id').defaultRandom().primaryKey(),
 
-  userId: uuid('user_id')
+  userId: text('user_id')
     .notNull()
     .references(() => user.id, {
       onDelete: 'cascade',

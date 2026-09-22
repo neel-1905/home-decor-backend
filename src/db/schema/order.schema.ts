@@ -27,7 +27,7 @@ export const orderStatusEnum = pgEnum('order_status', [
 export const order = pgTable('order', {
   id: uuid('id').defaultRandom().primaryKey(),
 
-  userId: uuid('user_id')
+  userId: text('user_id')
     .notNull()
     .references(() => user.id, {
       onDelete: 'cascade',

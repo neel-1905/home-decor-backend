@@ -5,7 +5,7 @@ import { user } from './user.schema.js';
 export const cart = pgTable('cart', {
   id: uuid('id').defaultRandom().primaryKey(),
 
-  userId: uuid('user_id')
+  userId: text('user_id')
     .notNull()
     .unique()
     .references(() => user.id, {
