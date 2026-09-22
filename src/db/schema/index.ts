@@ -5,3 +5,9 @@ export * from './verification.schema';
 
 export * from './category.schema';
 export * from './subcategory.schema';
+
+export * from './product.schema';
+export * from './product-subcategory.schema';
+export * from './product-review.schema';
+export * from './color.schema';
+export * from './product-color.schema';
