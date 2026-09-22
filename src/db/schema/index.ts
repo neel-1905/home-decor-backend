@@ -11,3 +11,6 @@ export * from './product-subcategory.schema';
 export * from './product-review.schema';
 export * from './color.schema';
 export * from './product-color.schema';
+
+export * from './wishlist.schema';
+export * from './wishlist-product.schema';
