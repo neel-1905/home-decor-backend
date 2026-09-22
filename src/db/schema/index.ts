@@ -14,3 +14,6 @@ export * from './product-color.schema';
 
 export * from './wishlist.schema';
 export * from './wishlist-product.schema';
+
+export * from './cart.schema';
+export * from './cart-item.schema';
