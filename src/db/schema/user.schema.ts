@@ -2,6 +2,7 @@ import { relations } from 'drizzle-orm';
 import { pgTable, text, timestamp, boolean, date } from 'drizzle-orm/pg-core';
 import { session } from './session.schema';
 import { account } from './account.schema';
+import { role } from './role.schema';
 
 export const user = pgTable('user', {
   id: text('id').primaryKey(),
@@ -11,6 +12,10 @@ export const user = pgTable('user', {
   mobile: text('mobile').notNull(),
   dob: date('dob', { mode: 'string' }).notNull(),
   image: text('image'),
+
+  roleId: text('role_id')
+    .notNull()
+    .references(() => role.id),
 
   isOnboardingComplete: boolean('is_onboarding_complete')
     .default(false)

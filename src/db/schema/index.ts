@@ -21,3 +21,7 @@ export * from './cart-item.schema';
 export * from './order.schema';
 export * from './order-item.schema';
 export * from './order-status-history.schema';
+
+export * from './role-permission.schema';
+export * from './role.schema';
+export * from './permission.schema';
