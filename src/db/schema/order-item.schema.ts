@@ -4,6 +4,7 @@ import {
   integer,
   text,
   numeric,
+  uuid,
 } from 'drizzle-orm/pg-core';
 
 import { order } from './order.schema.js';
@@ -12,13 +13,13 @@ import { product } from './product.schema.js';
 export const orderItem = pgTable(
   'order_item',
   {
-    orderId: text('order_id')
+    orderId: uuid('order_id')
       .notNull()
       .references(() => order.id, {
         onDelete: 'cascade',
       }),
 
-    productId: text('product_id')
+    productId: uuid('product_id')
       .notNull()
       .references(() => product.id, {
         onDelete: 'restrict',

@@ -36,6 +36,27 @@
       "when": 1790099834995,
       "tag": "0004_rbac",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790103585760,
+      "tag": "0005_add_uuid_all_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790104350384,
+      "tag": "0006_uuid_text",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790104931814,
+      "tag": "0007_loose_wiccan",
+      "breakpoints": true
     }
   ]
 }

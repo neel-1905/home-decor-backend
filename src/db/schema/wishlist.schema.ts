@@ -1,9 +1,9 @@
-import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { user } from './user.schema.js';
 
 export const wishlist = pgTable('wishlist', {
-  id: text('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
 
   userId: text('user_id')
     .notNull()

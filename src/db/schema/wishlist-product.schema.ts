@@ -1,4 +1,4 @@
-import { pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
+import { pgTable, primaryKey, text, uuid } from 'drizzle-orm/pg-core';
 
 import { wishlist } from './wishlist.schema.js';
 import { product } from './product.schema.js';
@@ -6,13 +6,13 @@ import { product } from './product.schema.js';
 export const wishlistProduct = pgTable(
   'wishlist_product',
   {
-    wishlistId: text('wishlist_id')
+    wishlistId: uuid('wishlist_id')
       .notNull()
       .references(() => wishlist.id, {
         onDelete: 'cascade',
       }),
 
-    productId: text('product_id')
+    productId: uuid('product_id')
       .notNull()
       .references(() => product.id, {
         onDelete: 'cascade',

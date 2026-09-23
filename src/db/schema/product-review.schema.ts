@@ -5,6 +5,7 @@ import {
   timestamp,
   check,
   unique,
+  uuid,
 } from 'drizzle-orm/pg-core';
 
 import { sql } from 'drizzle-orm';
@@ -15,9 +16,9 @@ import { product } from './product.schema.js';
 export const review = pgTable(
   'review',
   {
-    id: text('id').primaryKey(),
+    id: uuid('id').defaultRandom().primaryKey(),
 
-    productId: text('product_id')
+    productId: uuid('product_id')
       .notNull()
       .references(() => product.id, {
         onDelete: 'cascade',

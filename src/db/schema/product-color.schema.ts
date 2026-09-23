@@ -1,4 +1,4 @@
-import { pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
+import { pgTable, primaryKey, text, uuid } from 'drizzle-orm/pg-core';
 
 import { product } from './product.schema.js';
 import { color } from './color.schema.js';
@@ -6,13 +6,13 @@ import { color } from './color.schema.js';
 export const productColor = pgTable(
   'product_color',
   {
-    productId: text('product_id')
+    productId: uuid('product_id')
       .notNull()
       .references(() => product.id, {
         onDelete: 'cascade',
       }),
 
-    colorId: text('color_id')
+    colorId: uuid('color_id')
       .notNull()
       .references(() => color.id, {
         onDelete: 'cascade',

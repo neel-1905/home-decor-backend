@@ -1,11 +1,11 @@
-import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { order, orderStatusEnum } from './order.schema.js';
 
 export const orderStatusHistory = pgTable('order_status_history', {
-  id: text('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
 
-  orderId: text('order_id')
+  orderId: uuid('order_id')
     .notNull()
     .references(() => order.id, {
       onDelete: 'cascade',

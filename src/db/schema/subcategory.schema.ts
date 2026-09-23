@@ -1,10 +1,10 @@
-import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { category } from './category.schema.js';
 
 export const subcategory = pgTable('subcategory', {
-  id: text('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
 
-  categoryId: text('category_id')
+  categoryId: uuid('category_id')
     .notNull()
     .references(() => category.id, {
       onDelete: 'cascade',

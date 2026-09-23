@@ -13,9 +13,7 @@ export const user = pgTable('user', {
   dob: date('dob', { mode: 'string' }).notNull(),
   image: text('image'),
 
-  roleId: text('role_id')
-    .notNull()
-    .references(() => role.id),
+  roleId: text('role_id').references(() => role.id),
 
   isOnboardingComplete: boolean('is_onboarding_complete')
     .default(false)
