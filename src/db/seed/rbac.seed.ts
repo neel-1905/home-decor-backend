@@ -1,96 +1,174 @@
 import { and, eq } from 'drizzle-orm';
 
-import { db } from '..';
+import { db } from '../index';
 import { role } from '../schema/role.schema';
 import { permission } from '../schema/permission.schema';
 import { rolePermission } from '../schema/role-permission.schema';
 
 const permissions = [
+  // Users
+  'user:read',
+  'user:update',
+  'user:delete',
+
+  // Categories
   'category:create',
+  'category:read',
   'category:update',
   'category:delete',
 
+  // Subcategories
   'subcategory:create',
+  'subcategory:read',
   'subcategory:update',
   'subcategory:delete',
 
+  // Products
   'product:create',
+  'product:read',
   'product:update',
   'product:delete',
+
+  // Colors
+  'color:create',
+  'color:read',
+  'color:update',
+  'color:delete',
+
+  // Reviews
+  'review:create',
+  'review:read',
+  'review:update',
+  'review:delete',
+
+  // Wishlist
+  'wishlist:create',
+  'wishlist:read',
+  'wishlist:delete',
+
+  // Cart
+  'cart:create',
+  'cart:read',
+  'cart:update',
+  'cart:delete',
+
+  // Orders
+  'order:create',
+  'order:read',
+  'order:update',
+  'order:delete',
+
+  // Payments
+  'payment:create',
+  'payment:read',
+  'payment:update',
+];
+
+const adminPermissions = permissions;
+
+const userPermissions = [
+  // Products/catalog
+  'category:read',
+  'subcategory:read',
+  'product:read',
+  'color:read',
+
+  // Reviews
+  'review:create',
+  'review:read',
+  'review:update',
+  'review:delete',
+
+  // Wishlist
+  'wishlist:create',
+  'wishlist:read',
+  'wishlist:delete',
+
+  // Cart
+  'cart:create',
+  'cart:read',
+  'cart:update',
+  'cart:delete',
+
+  // Orders
+  'order:create',
+  'order:read',
+
+  // Payments
+  'payment:create',
+  'payment:read',
 ];
 
 async function seed() {
-  console.log('Seeding RBAC...');
+  console.log('🌱 Seeding RBAC...');
 
-  // -------------------------
-  // Roles
-  // -------------------------
+  // --------------------------------------------------
+  // 1. Create / get roles
+  // --------------------------------------------------
 
-  const existingRoles = await db.select().from(role);
-
-  let userRole = existingRoles.find((item) => item.name === 'User');
-  let adminRole = existingRoles.find((item) => item.name === 'Admin');
+  let userRole = (
+    await db.select().from(role).where(eq(role.name, 'User')).limit(1)
+  )[0];
 
   if (!userRole) {
-    const [createdRole] = await db
+    [userRole] = await db
       .insert(role)
       .values({
         name: 'User',
       })
       .returning();
-
-    userRole = createdRole;
   }
 
+  let adminRole = (
+    await db.select().from(role).where(eq(role.name, 'Admin')).limit(1)
+  )[0];
+
   if (!adminRole) {
-    const [createdRole] = await db
+    [adminRole] = await db
       .insert(role)
       .values({
         name: 'Admin',
       })
       .returning();
-
-    adminRole = createdRole;
   }
 
-  console.log('Roles seeded');
+  console.log('✅ Roles ready');
 
-  // -------------------------
-  // Permissions
-  // -------------------------
+  // --------------------------------------------------
+  // 2. Create / get permissions
+  // --------------------------------------------------
 
   const permissionRecords = [];
 
   for (const permissionName of permissions) {
-    const existingPermission = await db
-      .select()
-      .from(permission)
-      .where(eq(permission.name, permissionName))
-      .limit(1);
+    let permissionRecord = (
+      await db
+        .select()
+        .from(permission)
+        .where(eq(permission.name, permissionName))
+        .limit(1)
+    )[0];
 
-    if (existingPermission.length > 0) {
-      permissionRecords.push(existingPermission[0]);
-      continue;
+    if (!permissionRecord) {
+      [permissionRecord] = await db
+        .insert(permission)
+        .values({
+          name: permissionName,
+        })
+        .returning();
     }
 
-    const [createdPermission] = await db
-      .insert(permission)
-      .values({
-        name: permissionName,
-      })
-      .returning();
-
-    permissionRecords.push(createdPermission);
+    permissionRecords.push(permissionRecord);
   }
 
-  console.log('Permissions seeded');
+  console.log('✅ Permissions ready');
 
-  // -------------------------
-  // Admin permissions
-  // -------------------------
+  // --------------------------------------------------
+  // 3. Assign Admin permissions
+  // --------------------------------------------------
 
   for (const permissionRecord of permissionRecords) {
-    const existingRolePermission = await db
+    const existing = await db
       .select()
       .from(rolePermission)
       .where(
@@ -101,7 +179,7 @@ async function seed() {
       )
       .limit(1);
 
-    if (existingRolePermission.length === 0) {
+    if (existing.length === 0) {
       await db.insert(rolePermission).values({
         roleId: adminRole.id,
         permissionId: permissionRecord.id,
@@ -109,12 +187,46 @@ async function seed() {
     }
   }
 
-  console.log('Admin permissions assigned');
+  console.log('✅ Admin permissions assigned');
 
-  console.log('RBAC seed completed successfully');
+  // --------------------------------------------------
+  // 4. Assign User permissions
+  // --------------------------------------------------
+
+  for (const permissionName of userPermissions) {
+    const permissionRecord = permissionRecords.find(
+      (item) => item.name === permissionName,
+    );
+
+    if (!permissionRecord) {
+      continue;
+    }
+
+    const existing = await db
+      .select()
+      .from(rolePermission)
+      .where(
+        and(
+          eq(rolePermission.roleId, userRole.id),
+          eq(rolePermission.permissionId, permissionRecord.id),
+        ),
+      )
+      .limit(1);
+
+    if (existing.length === 0) {
+      await db.insert(rolePermission).values({
+        roleId: userRole.id,
+        permissionId: permissionRecord.id,
+      });
+    }
+  }
+
+  console.log('✅ User permissions assigned');
+
+  console.log('🌱 RBAC seed completed successfully');
 }
 
 seed().catch((error) => {
-  console.error('RBAC seed failed:', error);
+  console.error('❌ RBAC seed failed:', error);
   process.exit(1);
 });
