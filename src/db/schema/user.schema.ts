@@ -1,5 +1,12 @@
 import { relations } from 'drizzle-orm';
-import { pgTable, text, timestamp, boolean, date } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  date,
+  uuid,
+} from 'drizzle-orm/pg-core';
 import { session } from './session.schema';
 import { account } from './account.schema';
 import { role } from './role.schema';
@@ -13,7 +20,7 @@ export const user = pgTable('user', {
   dob: date('dob', { mode: 'string' }).notNull(),
   image: text('image'),
 
-  roleId: text('role_id').references(() => role.id),
+  roleId: uuid('role_id').references(() => role.id),
 
   isOnboardingComplete: boolean('is_onboarding_complete')
     .default(false)

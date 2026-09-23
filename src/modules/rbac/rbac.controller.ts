@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { RbacService } from './rbac.service';
-import { RequirePermissions } from '@/common/decorators';
+import { RequirePermissions, ResponseMessage } from '@/common/decorators';
 import { RbacGuard } from '@/common/guards';
 
 @Controller('rbac')
@@ -10,6 +10,7 @@ export class RbacController {
   @Get('test')
   @UseGuards(RbacGuard)
   @RequirePermissions('product:create')
+  // @ResponseMessage('RBAC Test successful')
   testRbac() {
     return {
       success: true,
