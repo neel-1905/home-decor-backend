@@ -9,6 +9,7 @@ export class AppValidationPipe extends ValidationPipe {
     super({
       whitelist: true,
       transform: true,
+      forbidNonWhitelisted: true,
 
       exceptionFactory: (errors: ValidationError[]) => {
         const validationErrors = errors.flatMap((error) =>
