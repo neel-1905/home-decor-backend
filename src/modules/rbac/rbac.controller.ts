@@ -10,7 +10,7 @@ export class RbacController {
   @Get('test')
   @UseGuards(RbacGuard)
   @RequirePermissions('product:create')
-  // @ResponseMessage('RBAC Test successful')
+  @ResponseMessage('RBAC Test successful')
   testRbac() {
     return {
       success: true,
