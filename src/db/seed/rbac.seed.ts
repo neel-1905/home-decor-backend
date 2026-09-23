@@ -1,12 +1,9 @@
-import 'dotenv/config';
-import { drizzle } from 'drizzle-orm/neon-http';
 import { and, eq } from 'drizzle-orm';
 
-import { role } from '../schema/role.schema';
-import { permission } from '../schema/permission.schema.js';
-import { rolePermission } from '../schema/role-permission.schema.js';
-import { ENV } from '@/config/env.config';
 import { db } from '..';
+import { role } from '../schema/role.schema';
+import { permission } from '../schema/permission.schema';
+import { rolePermission } from '../schema/role-permission.schema';
 
 const permissions = [
   'category:create',
@@ -23,7 +20,7 @@ const permissions = [
 ];
 
 async function seed() {
-  console.log('Seeding roles and permissions...');
+  console.log('Seeding RBAC...');
 
   // -------------------------
   // Roles
@@ -35,25 +32,25 @@ async function seed() {
   let adminRole = existingRoles.find((item) => item.name === 'Admin');
 
   if (!userRole) {
-    const [created] = await db
+    const [createdRole] = await db
       .insert(role)
       .values({
         name: 'User',
       })
       .returning();
 
-    userRole = created;
+    userRole = createdRole;
   }
 
   if (!adminRole) {
-    const [created] = await db
+    const [createdRole] = await db
       .insert(role)
       .values({
         name: 'Admin',
       })
       .returning();
 
-    adminRole = created;
+    adminRole = createdRole;
   }
 
   console.log('Roles seeded');
@@ -65,25 +62,25 @@ async function seed() {
   const permissionRecords = [];
 
   for (const permissionName of permissions) {
-    const existing = await db
+    const existingPermission = await db
       .select()
       .from(permission)
       .where(eq(permission.name, permissionName))
       .limit(1);
 
-    if (existing.length > 0) {
-      permissionRecords.push(existing[0]);
+    if (existingPermission.length > 0) {
+      permissionRecords.push(existingPermission[0]);
       continue;
     }
 
-    const [created] = await db
+    const [createdPermission] = await db
       .insert(permission)
       .values({
         name: permissionName,
       })
       .returning();
 
-    permissionRecords.push(created);
+    permissionRecords.push(createdPermission);
   }
 
   console.log('Permissions seeded');
@@ -93,7 +90,7 @@ async function seed() {
   // -------------------------
 
   for (const permissionRecord of permissionRecords) {
-    const existing = await db
+    const existingRolePermission = await db
       .select()
       .from(rolePermission)
       .where(
@@ -104,7 +101,7 @@ async function seed() {
       )
       .limit(1);
 
-    if (existing.length === 0) {
+    if (existingRolePermission.length === 0) {
       await db.insert(rolePermission).values({
         roleId: adminRole.id,
         permissionId: permissionRecord.id,

@@ -50,6 +50,13 @@
       "when": 1790104350384,
       "tag": "0006_uuid_text",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790104931814,
+      "tag": "0007_loose_wiccan",
+      "breakpoints": true
     }
   ]
 }
