@@ -19,7 +19,7 @@ import { UpdateColorDto } from './dto/update-color.dto';
 import { PaginationQueryDto } from '@/common/dto/pagination-query.dto';
 
 @Controller('colors')
-export class ColorsController {
+export class ColorController {
   constructor(private readonly colorsService: ColorService) {}
 
   @Post()
