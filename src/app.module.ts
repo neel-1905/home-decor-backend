@@ -8,6 +8,7 @@ import { RbacModule } from '@modules/rbac/rbac.module';
 import { CategoriesModule } from '@modules/categories/categories.module';
 import { SubcategoryModule } from '@modules/subcategory/subcategory.module';
 import { ProductModule } from '@modules/product/product.module';
+import { ColorModule } from './modules/color/color.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ProductModule } from '@modules/product/product.module';
     CategoriesModule,
     SubcategoryModule,
     ProductModule,
+    ColorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

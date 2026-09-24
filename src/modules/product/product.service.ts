@@ -6,7 +6,13 @@ import {
 import { and, eq, inArray } from 'drizzle-orm';
 
 import { db } from '@/db';
-import { product, productSubcategory, subcategory } from '@/db/schema';
+import {
+  color,
+  product,
+  productColor,
+  productSubcategory,
+  subcategory,
+} from '@/db/schema';
 
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductQueryDto } from './dto/product-query.dto';
@@ -46,6 +52,17 @@ export class ProductService {
         throw new NotFoundException('One or more subcategories do not exist.');
       }
 
+      const colors = await tx
+        .select({
+          id: color.id,
+        })
+        .from(color)
+        .where(inArray(color.id, data.colorIds));
+
+      if (colors.length !== data.colorIds.length) {
+        throw new NotFoundException('One or more color IDs do not exist.');
+      }
+
       // 3. Create product
       const [newProduct] = await tx
         .insert(product)
@@ -75,9 +92,17 @@ export class ProductService {
         })),
       );
 
+      await tx.insert(productColor).values(
+        data.colorIds.map((colorId) => ({
+          productId: newProduct.id,
+          colorId,
+        })),
+      );
+
       return {
         ...newProduct,
         subcategoryIds: data.subcategoryIds,
+        colorIds: data.colorIds,
       };
     });
   }
@@ -90,6 +115,7 @@ export class ProductService {
       sortOrder = 'desc',
       sortBy = 'createdAt',
       subcategoryId,
+      colorId,
     } = query;
 
     const offset = (page - 1) * limit;
@@ -106,6 +132,10 @@ export class ProductService {
 
     if (subcategoryId) {
       conditions.push(eq(productSubcategory.subcategoryId, subcategoryId));
+    }
+
+    if (colorId) {
+      conditions.push(eq(productColor.colorId, colorId));
     }
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
@@ -126,6 +156,7 @@ export class ProductService {
         productSubcategory,
         eq(product.id, productSubcategory.productId),
       )
+      .leftJoin(productColor, eq(product.id, productColor.productId))
       .where(whereClause)
       .orderBy(orderBy)
       .limit(limit)
@@ -140,6 +171,7 @@ export class ProductService {
         productSubcategory,
         eq(product.id, productSubcategory.productId),
       )
+      .leftJoin(productColor, eq(product.id, productColor.productId))
       .where(whereClause);
 
     const totalRecords = Number(count);
@@ -185,9 +217,17 @@ export class ProductService {
       .from(productSubcategory)
       .where(eq(productSubcategory.productId, id));
 
+    const productColors = await db
+      .select({
+        colorId: productColor.colorId,
+      })
+      .from(productColor)
+      .where(eq(productColor.productId, id));
+
     return {
       ...productRecord,
       subcategoryIds: subcategories.map((item) => item.id),
+      colorIds: productColors.map((item) => item.colorId),
     };
   }
 
@@ -236,6 +276,19 @@ export class ProductService {
           throw new NotFoundException(
             'One or more subcategories do not exist.',
           );
+        }
+      }
+
+      if (data.colorIds !== undefined) {
+        const colors = await tx
+          .select({
+            id: color.id,
+          })
+          .from(color)
+          .where(inArray(color.id, data.colorIds));
+
+        if (colors.length !== data.colorIds.length) {
+          throw new NotFoundException('One or more color IDs do not exist.');
         }
       }
 
@@ -288,11 +341,30 @@ export class ProductService {
         }
       }
 
+      if (data.colorIds !== undefined) {
+        await tx.delete(productColor).where(eq(productColor.productId, id));
+
+        await tx.insert(productColor).values(
+          data.colorIds.map((colorId) => ({
+            productId: id,
+            colorId,
+          })),
+        );
+      }
+
+      const productColors = await tx
+        .select({
+          colorId: productColor.colorId,
+        })
+        .from(productColor)
+        .where(eq(productColor.productId, id));
+
       return {
         ...updatedProduct,
         ...(data.subcategoryIds !== undefined && {
           subcategoryIds: data.subcategoryIds,
         }),
+        colorIds: productColors.map((item) => item.colorId),
       };
     });
   }

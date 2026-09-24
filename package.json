@@ -26,7 +26,8 @@
     "db:studio": "bun x drizzle-kit studio",
     "seed:rbac": "bun run src/db/seed/rbac.seed.ts",
     "seed:reset": "bun run src/db/seed/reset.seed.ts",
-    "seed:catalog": "bun run src/db/seed/catalog.seed.ts"
+    "seed:catalog": "bun run src/db/seed/catalog.seed.ts",
+    "seed:color": "bun run src/db/seed/color.seed.ts"
   },
   "dependencies": {
     "@better-auth/expo": "^1.7.5",

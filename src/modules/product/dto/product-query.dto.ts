@@ -12,4 +12,10 @@ export class ProductQueryDto extends PaginationQueryDto {
   @IsOptional()
   @IsIn(['name', 'price', 'createdAt'])
   sortBy: 'name' | 'price' | 'createdAt' = 'createdAt';
+
+  @IsOptional()
+  @IsUUID('4', {
+    message: 'Color ID must be a valid UUID.',
+  })
+  colorId?: string;
 }

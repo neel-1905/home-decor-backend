@@ -60,4 +60,13 @@ export class CreateProductDto {
     message: 'Each subcategory ID must be a valid UUID.',
   })
   subcategoryIds: string[];
+
+  @IsArray({
+    message: 'Color IDs must be an array.',
+  })
+  @IsUUID('4', {
+    each: true,
+    message: 'Each color ID must be a valid UUID.',
+  })
+  colorIds: string[];
 }
