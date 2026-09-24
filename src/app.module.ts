@@ -6,7 +6,8 @@ import { auth } from '@lib/auth';
 import { UsersModule } from '@modules/users/users.module';
 import { RbacModule } from '@modules/rbac/rbac.module';
 import { CategoriesModule } from '@modules/categories/categories.module';
-import { SubcategoryModule } from './modules/subcategory/subcategory.module';
+import { SubcategoryModule } from '@modules/subcategory/subcategory.module';
+import { ProductModule } from '@modules/product/product.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { SubcategoryModule } from './modules/subcategory/subcategory.module';
     RbacModule,
     CategoriesModule,
     SubcategoryModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
