@@ -45,6 +45,7 @@ const permissions = [
   'wishlist:create',
   'wishlist:read',
   'wishlist:delete',
+  'wishlist:update',
 
   // Cart
   'cart:create',

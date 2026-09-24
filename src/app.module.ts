@@ -10,6 +10,7 @@ import { SubcategoryModule } from '@modules/subcategory/subcategory.module';
 import { ProductModule } from '@modules/product/product.module';
 import { ColorModule } from '@modules/color/color.module';
 import { ReviewsModule } from '@modules/reviews/reviews.module';
+import { WishlistModule } from '@modules/wishlist/wishlist.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ReviewsModule } from '@modules/reviews/reviews.module';
     ProductModule,
     ColorModule,
     ReviewsModule,
+    WishlistModule,
   ],
   controllers: [AppController],
   providers: [AppService],
