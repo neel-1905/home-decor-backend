@@ -11,6 +11,7 @@ import { ProductModule } from '@modules/product/product.module';
 import { ColorModule } from '@modules/color/color.module';
 import { ReviewsModule } from '@modules/reviews/reviews.module';
 import { WishlistModule } from '@modules/wishlist/wishlist.module';
+import { CartModule } from '@modules/cart/cart.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { WishlistModule } from '@modules/wishlist/wishlist.module';
     ColorModule,
     ReviewsModule,
     WishlistModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],
