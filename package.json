@@ -24,7 +24,9 @@
     "db:push": "bun x drizzle-kit push",
     "db:pull": "bun x drizzle-kit pull",
     "db:studio": "bun x drizzle-kit studio",
-    "seed:rbac": "bun run src/db/seed/rbac.seed.ts"
+    "seed:rbac": "bun run src/db/seed/rbac.seed.ts",
+    "seed:reset": "bun run src/db/seed/reset.seed.ts",
+    "seed:catalog": "bun run src/db/seed/catalog.seed.ts"
   },
   "dependencies": {
     "@better-auth/expo": "^1.7.5",
@@ -38,6 +40,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "drizzle-orm": "^0.45.3",
+    "drizzle-seed": "^0.3.1",
     "pg": "^8.23.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
